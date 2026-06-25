@@ -1,0 +1,38 @@
+name: CI
+
+# Build-/Kompilier-Check für Pull Requests; zusätzlich manuell startbar.
+"on":
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compile mod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: .NET SDK einrichten
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: 7DTD-Server-Payload cachen
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.7dtd-server
+          key: ${{ runner.os }}-steamcmd-7dtd-v1
+          restore-keys: |
+            ${{ runner.os }}-steamcmd-7dtd-
+
+      - name: 7DTD Dedicated Server installieren (für Build-DLLs)
+        run: bash scripts/install-7dtd-server.sh "${{ github.workspace }}/.7dtd-server"
+
+      - name: Mod kompilieren
+        run: dotnet build CategorySorter.csproj -c Release -p:GameRoot="${{ github.workspace }}/.7dtd-server"

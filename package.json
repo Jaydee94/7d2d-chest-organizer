@@ -1,0 +1,13 @@
+{
+  "name": "categorysorter-release",
+  "version": "0.0.0-semantic-release",
+  "private": true,
+  "description": "Release-Tooling (semantic-release) für die CategorySorter 7DTD-Mod",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.3.5",
+    "semantic-release": "^24.2.3"
+  }
+}

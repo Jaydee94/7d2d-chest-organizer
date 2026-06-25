@@ -1,0 +1,86 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Build-Referenzen werden gegen eine vorhandene 7DTD-Installation aufgelöst.
+    In CI lädt SteamCMD den Dedicated Server und der Build wird mit
+        dotnet build -c Release -p:GameRoot="$SERVER_ROOT"
+    aufgerufen. Lokal (macOS) greifen die Default-Pfade unten.
+  -->
+  <PropertyGroup>
+    <!-- GameRoot: in CI per -p:GameRoot=... gesetzt; lokal Auto-Detect (Linux/Windows-Beispiele). -->
+    <GameRoot Condition="'$(GameRoot)' == '' and Exists('/home/steam/.steam/SteamApps/common/7 Days to Die Dedicated Server')">/home/steam/.steam/SteamApps/common/7 Days to Die Dedicated Server</GameRoot>
+    <GameRoot Condition="'$(GameRoot)' == '' and Exists('/opt/7dtd')">/opt/7dtd</GameRoot>
+
+    <!-- ManagedDir aus GameRoot ableiten (Server- oder Client-Layout) -->
+    <ManagedDir Condition="'$(ManagedDir)' == '' and '$(GameRoot)' != '' and Exists('$(GameRoot)/7DaysToDieServer_Data/Managed')">$(GameRoot)/7DaysToDieServer_Data/Managed</ManagedDir>
+    <ManagedDir Condition="'$(ManagedDir)' == '' and '$(GameRoot)' != '' and Exists('$(GameRoot)/7DaysToDie_Data/Managed')">$(GameRoot)/7DaysToDie_Data/Managed</ManagedDir>
+    <!-- lokale macOS-Steam-Installation (Default für Entwicklung) -->
+    <ManagedDir Condition="'$(ManagedDir)' == '' and Exists('/Users/jaydee/Library/Application Support/Steam/steamapps/common/7 Days To Die/7DaysToDie.app/Contents/Resources/Data/Managed')">/Users/jaydee/Library/Application Support/Steam/steamapps/common/7 Days To Die/7DaysToDie.app/Contents/Resources/Data/Managed</ManagedDir>
+
+    <!-- Harmony: bevorzugt aus der Installation, sonst NuGet-Fallback (nur Build-Zeit) -->
+    <HarmonyPath Condition="'$(HarmonyPath)' == '' and Exists('$(ManagedDir)/0Harmony.dll')">$(ManagedDir)/0Harmony.dll</HarmonyPath>
+    <HarmonyPath Condition="'$(HarmonyPath)' == '' and '$(GameRoot)' != '' and Exists('$(GameRoot)/Mods/0_TFP_Harmony/0Harmony.dll')">$(GameRoot)/Mods/0_TFP_Harmony/0Harmony.dll</HarmonyPath>
+    <HarmonyPath Condition="'$(HarmonyPath)' == '' and Exists('/Users/jaydee/Library/Application Support/Steam/steamapps/common/7 Days To Die/Mods/0_TFP_Harmony/0Harmony.dll')">/Users/jaydee/Library/Application Support/Steam/steamapps/common/7 Days To Die/Mods/0_TFP_Harmony/0Harmony.dll</HarmonyPath>
+
+    <AssemblyName>CategorySorter</AssemblyName>
+    <RootNamespace>CategorySorter</RootNamespace>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Optimize>true</Optimize>
+    <Deterministic>true</Deterministic>
+    <OutputPath>bin\Release</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0.0</Version>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src\**\*.cs" />
+  </ItemGroup>
+
+  <!-- net48-Referenz-Assemblies, damit der Build plattformübergreifend (Linux/macOS) klappt -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ManagedDir)/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass" Condition="Exists('$(ManagedDir)/Assembly-CSharp-firstpass.dll')">
+      <HintPath>$(ManagedDir)/Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(ManagedDir)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="LogLibrary" Condition="Exists('$(ManagedDir)/LogLibrary.dll')">
+      <HintPath>$(ManagedDir)/LogLibrary.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony" Condition="'$(HarmonyPath)' != ''">
+      <HintPath>$(HarmonyPath)</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <PackageReference Include="Lib.Harmony" Version="2.2.2" Condition="'$(HarmonyPath)' == ''" />
+  </ItemGroup>
+
+  <Target Name="FailIfGameDllsMissing" BeforeTargets="ResolveReferences"
+          Condition="!Exists('$(ManagedDir)/Assembly-CSharp.dll') or !Exists('$(ManagedDir)/UnityEngine.CoreModule.dll')">
+    <Error Text="7DTD-Build-Referenzen nicht gefunden (ManagedDir='$(ManagedDir)'). GameRoot auf eine gültige Client-/Server-Installation setzen oder -p:GameRoot=... in CI übergeben." />
+  </Target>
+
+</Project>

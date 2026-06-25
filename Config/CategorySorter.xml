@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CategorySorter.Config>
+    <!-- Zusaetzliche Log-Ausgaben. -->
+    <VerboseLogging>false</VerboseLogging>
+
+    <!-- Suchradius in Bloecken um die Sortierkiste. -1 = volle 3x3 Chunks. -->
+    <MaxDistance>20.0</MaxDistance>
+
+    <!-- Name der Sortierkiste (Klammern optional, Gross/Klein egal). -->
+    <SortTag>[sort]</SortTag>
+
+    <!-- Name der optionalen Sammelkiste fuer nicht zuordenbare Items. -->
+    <MiscTag>[misc]</MiscTag>
+</CategorySorter.Config>

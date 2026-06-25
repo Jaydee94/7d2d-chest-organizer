@@ -1,0 +1,14 @@
+# Build-Artefakte
+bin/
+obj/
+dist/
+staging/
+*.user
+
+# CI / Tooling
+node_modules/
+.7dtd-server/
+game-dlls*
+
+# macOS
+.DS_Store

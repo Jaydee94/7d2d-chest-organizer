@@ -1,0 +1,68 @@
+name: Release
+
+# Nur manuell startbar ("Run workflow"-Button oder: gh workflow run release.yml)
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (berechnet Version + Notes, veröffentlicht aber nichts)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write       # Tags, Release und Changelog-Commit
+  issues: write         # semantic-release kommentiert ggf. an Issues/PRs
+  pull-requests: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and semantic release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (volle History für semantic-release)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: .NET SDK einrichten
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: 7DTD-Server-Payload cachen
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.7dtd-server
+          key: ${{ runner.os }}-steamcmd-7dtd-v1
+          restore-keys: |
+            ${{ runner.os }}-steamcmd-7dtd-
+
+      - name: 7DTD Dedicated Server installieren (für Build-DLLs)
+        run: bash scripts/install-7dtd-server.sh "${{ github.workspace }}/.7dtd-server"
+
+      - name: Mod kompilieren
+        run: dotnet build CategorySorter.csproj -c Release -p:GameRoot="${{ github.workspace }}/.7dtd-server"
+
+      - name: Release-Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            npx semantic-release --dry-run
+          else
+            npx semantic-release
+          fi
