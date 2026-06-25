@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# Gibt einen statischen Installations-Abschnitt aus, der von semantic-release an die
-# aus den Commits generierten Release Notes angehängt wird.
+# Prints a static installation section that semantic-release appends to the
+# release notes generated from commits.
 #
-# Verwendung: scripts/release-footer.sh <version>
+# Usage: scripts/release-footer.sh <version>
 set -euo pipefail
 V="${1:-}"
 
 cat <<EOF
 
 ### Installation
-1. Lade \`CategorySorter-v${V}.zip\` herunter und entpacke es.
-2. Kopiere den Ordner \`CategorySorter/\` in das \`Mods/\`-Verzeichnis deines Servers.
-3. Starte den Server neu. (Rein serverseitig — Clients müssen nichts installieren; EAC kann auf dem Dedicated Server aktiv bleiben.)
+1. Download \`CategorySorter-v${V}.zip\` and unzip it.
+2. Copy the \`CategorySorter/\` folder into your server's \`Mods/\` directory.
+3. Restart the server. (Server-side only — clients don't need to install anything; EAC can stay enabled on a dedicated server.)
 
-### Inhalt
+### Contents
 \`\`\`
 CategorySorter/
 ├── CategorySorter.dll
@@ -22,5 +22,5 @@ CategorySorter/
     └── CategorySorter.xml
 \`\`\`
 
-Gebaut für **7 Days to Die V2.6**.
+Built for **7 Days to Die V2.6**.
 EOF
