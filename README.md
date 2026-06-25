@@ -31,34 +31,36 @@ Label rules:
 
 There are three kinds of labels:
 
-| Label | Function |
-|-------|----------|
-| `[sort]` | **Sorting chest** – its contents are distributed when closed. |
-| *category name* | **Category chest** – receives items of that category (see table below). |
-| `[misc]` | **Catch-all chest** – receives anything that does not match an existing category chest. |
+| Kind | Example chest name (type exactly this) | Function |
+|------|----------------------------------------|----------|
+| Sorting chest | `[sort]` | Its contents are distributed when closed. |
+| Category chest | `[Ammo/Weapons]` | Receives items of that category (see full list below). |
+| Catch-all chest | `[misc]` | Receives anything that does not match an existing category chest. |
 
 ---
 
 ## Available category labels
 
 The categories match the game's item groups. An item is placed into a category chest exactly when
-that chest's label matches one of the item's categories. Possible labels:
+that chest's label matches one of the item's categories. Name the chest exactly as shown in the
+**Chest name** column (the square brackets are recommended; they are optional and the name is
+case-insensitive):
 
-| Label | Contents (typical items) |
-|-------|---------------------------|
-| `Basic` | Basic early-game items |
-| `Ammo/Weapons` | Weapons and ammunition |
-| `Tools/Traps` | Tools, devices and traps |
-| `Building` | Building materials and placeable blocks |
-| `Resources` | Raw materials and crafting resources |
-| `Forging/Molds` | Forging materials and molds |
-| `Decor` | Decoration and furnishing items |
-| `Medicine` | Medicine, bandages and remedies |
-| `Chemicals` | Chemicals and chemical base materials |
-| `Food/Cooking` | Food, drinks and cooking ingredients |
-| `Clothing` | Clothing and armor |
-| `Miscellaneous` | Miscellaneous items without a dedicated category |
-| `Special Items` | Special items |
+| Category | Chest name (type exactly this) | Contents (typical items) |
+|----------|--------------------------------|---------------------------|
+| Basic | `[Basic]` | Basic early-game items |
+| Ammo/Weapons | `[Ammo/Weapons]` | Weapons and ammunition |
+| Tools/Traps | `[Tools/Traps]` | Tools, devices and traps |
+| Building | `[Building]` | Building materials and placeable blocks |
+| Resources | `[Resources]` | Raw materials and crafting resources |
+| Forging/Molds | `[Forging/Molds]` | Forging materials and molds |
+| Decor | `[Decor]` | Decoration and furnishing items |
+| Medicine | `[Medicine]` | Medicine, bandages and remedies |
+| Chemicals | `[Chemicals]` | Chemicals and chemical base materials |
+| Food/Cooking | `[Food/Cooking]` | Food, drinks and cooking ingredients |
+| Clothing | `[Clothing]` | Clothing and armor |
+| Miscellaneous | `[Miscellaneous]` | Miscellaneous items without a dedicated category |
+| Special Items | `[Special Items]` | Special items |
 
 > Note: You don't need a chest for every category. Create only the category chests you need — the
 > rest goes into `[misc]` or stays in the `[sort]` chest.
