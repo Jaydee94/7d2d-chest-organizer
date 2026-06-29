@@ -4,7 +4,7 @@
     <DisplayName value="Category Sorter" />
     <Description value="Serverseitige Mod: Items aus einer mit [sort] benannten Kiste werden beim Schliessen automatisch in nahe Kisten einsortiert, die nach einer Item-Kategorie (z.B. Ammo/Weapons, Tools/Traps) benannt sind. Optionale [misc]-Sammelkiste. Clients muessen nichts installieren." />
     <Author value="jaydee94" />
-    <Version value="1.0.0.0" />
+    <Version value="1.1.0.0" />
     <Website value="" />
     <SkipWithAntiCheat value="true" />
 </xml>

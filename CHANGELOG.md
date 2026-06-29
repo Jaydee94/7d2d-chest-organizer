@@ -1,3 +1,27 @@
+# [1.1.0](https://github.com/Jaydee94/7d2d-chest-organizer/compare/v1.0.0...v1.1.0) (2026-06-29)
+
+
+### Features
+
+* match short chest labels and correct V2.6 item categories ([176883d](https://github.com/Jaydee94/7d2d-chest-organizer/commit/176883df23862901db9f08f88ca8fc21bf2ddf5b))
+
+
+### Installation
+1. Download `CategorySorter-v1.1.0.zip` and unzip it.
+2. Copy the `CategorySorter/` folder into your server's `Mods/` directory.
+3. Restart the server. (Server-side only — clients don't need to install anything; EAC can stay enabled on a dedicated server.)
+
+### Contents
+```
+CategorySorter/
+├── CategorySorter.dll
+├── ModInfo.xml
+└── Config/
+    └── CategorySorter.xml
+```
+
+Built for **7 Days to Die V2.6**.
+
 # 1.0.0 (2026-06-25)
 
 
