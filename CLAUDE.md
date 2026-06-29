@@ -45,10 +45,20 @@ the server (`ConnectionManager.Instance.IsServer`):
 - **`src/Sorter.cs`** — core logic (`DoSortingOut`). Reads the source chest via
   `TileEntityComposite` features `TEFeatureSignable` (name) and `TEFeatureStorage` (`items`).
   Only proceeds if the name matches the sort tag. Buckets nearby chests into category targets vs
-  `[misc]`, then for each item finds the nearest matching category chest (item belongs to a category
-  when `ItemClass.GetForId(stack.itemValue.type).Groups` contains the chest's label). Moves via
-  `ITileEntityLootable.TryStackItem`/`AddItem` (the `AddItem` fallback covers non-stackable items),
-  then `SetModified()` to sync to clients.
+  `[misc]`, then for each item finds the nearest matching category chest via `CategoryMatcher.Matches`.
+  Moves via `ITileEntityLootable.TryStackItem`/`AddItem` (the `AddItem` fallback covers non-stackable
+  items), then `SetModified()` to sync to clients.
+- **`src/CategoryMatcher.cs`** — decides whether a chest label matches an item's categories
+  (`ItemClass.Groups`). **V2.6 reality (verified against the local `items.xml` + decompiled
+  `ItemClass`):** categories come from the item property **`Group`** (singular) — e.g.
+  `Group="Ammo/Weapons,Ranged Weapons"`; `ItemClass` comma-splits it into `Groups` and **defaults to
+  `Decor/Miscellaneous`** when absent (only ~311 of ~1390 items define a `Group`). The real category
+  set is: `Resources`, `Food/Cooking`, `Ammo/Weapons` (umbrella), `Ranged Weapons`, `Melee Weapons`,
+  `Ammo`, `Tools/Traps`, `Special Items`, `Books`, `Science`, `Medical`, `Chemicals`, `Armor`,
+  `Clothing`, `Robotics`, `Basics`, `Building`, `Decor/Miscellaneous`. Matching: a label matches a
+  group token **or any of its slash-segments** (so `[Food]` matches `Food/Cooking`), with an optional
+  alias map (Config) for custom names; internal filter tokens (`CF*`, `TC*`, `*Only`, `advBuilding`)
+  are ignored.
 - **`src/TargetScanner.cs`** — finds candidate chests via a 3×3 chunk scan (`World.GetChunkSync`,
   `chunk.GetTileEntities()`), filtered by radius, container type, and skipping the sort chest itself,
   player-opened chests, and un-looted world containers. Returns them ordered by distance.
@@ -56,7 +66,9 @@ the server (`ConnectionManager.Instance.IsServer`):
   case-insensitively. Used for both special tags and category names.
 - **`src/Config.cs`** — loads `Config/CategorySorter.xml` at runtime from
   `Mods/CategorySorter/Config/CategorySorter.xml` (path derived from the assembly name, so the
-  deployed mod folder must be named `CategorySorter`).
+  deployed mod folder must be named `CategorySorter`). Also parses the optional `<Aliases>` block
+  (`<Alias label="Guns" group="Ranged Weapons"/>`, comma-separated `group` allowed) into
+  `Config.Aliases` for `CategoryMatcher`.
 
 ### Build model (csproj)
 

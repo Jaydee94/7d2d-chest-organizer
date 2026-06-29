@@ -24,6 +24,14 @@ namespace CategorySorter
         /// <summary>Name der optionalen Sammelkiste fuer nicht zuordenbare Items.</summary>
         public static string MiscTag { get; private set; } = "[misc]";
 
+        /// <summary>
+        /// Optionale Alias-Tabelle: Kisten-Label (klammernfrei) -> eine oder mehrere echte
+        /// Kategorien. Erlaubt frei waehlbare Wunschnamen zusaetzlich zum automatischen
+        /// Slash-Segment-Matching. Case-insensitive.
+        /// </summary>
+        public static IDictionary<string, string[]> Aliases { get; private set; }
+            = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
         /// <summary>Radius in Bloecken, in dem nach Ziel-Kisten gesucht wird. -1 = volle 3x3-Chunks.</summary>
         public static float MaxDistance { get; private set; } = 20f;
 
@@ -77,14 +85,47 @@ namespace CategorySorter
                 if (miscTag != null && !string.IsNullOrEmpty(miscTag.InnerText))
                     MiscTag = miscTag.InnerText.Trim();
 
+                LoadAliases(root["Aliases"]);
+
                 Log.Out("[" + AssemblyName + "] Config geladen: SortTag=" + SortTag
                     + ", MiscTag=" + MiscTag + ", MaxDistance=" + MaxDistance
+                    + ", Aliases=" + Aliases.Count
                     + ", VerboseLogging=" + VerboseLogging);
             }
             catch (Exception e)
             {
                 Log.Error("[" + AssemblyName + "] Config-Fehler: " + e.Message);
             }
+        }
+
+        /// <summary>
+        /// Liest &lt;Aliases&gt;&lt;Alias label="Guns" group="Ranged Weapons"/&gt;...&lt;/Aliases&gt;.
+        /// "group" darf mehrere echte Kategorien per Komma enthalten. Label-Klammern werden entfernt.
+        /// </summary>
+        private static void LoadAliases(XmlElement aliasesRoot)
+        {
+            if (aliasesRoot == null) return;
+
+            var map = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+            foreach (XmlNode node in aliasesRoot.ChildNodes)
+            {
+                if (!(node is XmlElement el)) continue;
+                if (!string.Equals(el.Name, "Alias", StringComparison.OrdinalIgnoreCase)) continue;
+
+                var label = TagUtil.Strip(el.GetAttribute("label"));
+                var groupAttr = el.GetAttribute("group");
+                if (string.IsNullOrEmpty(label) || string.IsNullOrEmpty(groupAttr)) continue;
+
+                var groups = new List<string>();
+                foreach (var g in groupAttr.Split(','))
+                {
+                    var trimmed = g.Trim();
+                    if (trimmed.Length > 0) groups.Add(trimmed);
+                }
+                if (groups.Count > 0) map[label] = groups.ToArray();
+            }
+
+            Aliases = map;
         }
     }
 }

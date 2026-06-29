@@ -10,7 +10,7 @@ anything.
 ## Quick start
 
 1. Place a storage chest and name it exactly **`[sort]`** → this is the sorting chest.
-2. Name other chests after a **category**, e.g. `Ammo/Weapons`, `Tools/Traps`, `Food/Cooking`.
+2. Name other chests after a **category**, e.g. `[Food]`, `[Weapons]`, `[Tools]`, `[Resources]`.
 3. Optionally name a chest **`[misc]`** → a catch-all for everything else.
 4. Put items into the `[sort]` chest and **close** it → the server distributes them automatically
    and confirms the result in chat.
@@ -25,45 +25,76 @@ carry a label.
 
 Label rules:
 
-- **Case-insensitive** — `ammo/weapons` = `Ammo/Weapons`.
-- **Square brackets optional** — `Tools/Traps` = `[Tools/Traps]`.
-- **Keep the slash** — categories such as `Ammo/Weapons` are written exactly like that.
+- **Case-insensitive** — `food` = `Food`.
+- **Square brackets optional** — `Food` = `[Food]`.
+- **Short labels work** — the game's compound categories also match each part around the slash, so
+  you can use the short half instead of the full name: `[Food]` matches `Food/Cooking`, `[Tools]`
+  matches `Tools/Traps`, `[Weapons]` matches `Ammo/Weapons`. You may still type the full name if you
+  prefer.
 
 There are three kinds of labels:
 
 | Kind | Example chest name (type exactly this) | Function |
 |------|----------------------------------------|----------|
 | Sorting chest | `[sort]` | Its contents are distributed when closed. |
-| Category chest | `[Ammo/Weapons]` | Receives items of that category (see full list below). |
+| Category chest | `[Food]` | Receives items of that category (see full list below). |
 | Catch-all chest | `[misc]` | Receives anything that does not match an existing category chest. |
 
 ---
 
 ## Available category labels
 
-The categories match the game's item groups. An item is placed into a category chest exactly when
-that chest's label matches one of the item's categories. Name the chest exactly as shown in the
-**Chest name** column (the square brackets are recommended; they are optional and the name is
-case-insensitive):
+These are the **real item categories used by 7 Days to Die V2.6** (taken from the game's item
+`Group` data). An item is placed into a category chest exactly when that chest's label matches one
+of the item's categories. The **Recommended chest name** is the shortest label that works; the
+**Full game category** is the underlying name, which also works if you prefer it.
 
-| Category | Chest name (type exactly this) | Contents (typical items) |
-|----------|--------------------------------|---------------------------|
-| Basic | `[Basic]` | Basic early-game items |
-| Ammo/Weapons | `[Ammo/Weapons]` | Weapons and ammunition |
-| Tools/Traps | `[Tools/Traps]` | Tools, devices and traps |
-| Building | `[Building]` | Building materials and placeable blocks |
-| Resources | `[Resources]` | Raw materials and crafting resources |
-| Forging/Molds | `[Forging/Molds]` | Forging materials and molds |
-| Decor | `[Decor]` | Decoration and furnishing items |
-| Medicine | `[Medicine]` | Medicine, bandages and remedies |
-| Chemicals | `[Chemicals]` | Chemicals and chemical base materials |
-| Food/Cooking | `[Food/Cooking]` | Food, drinks and cooking ingredients |
-| Clothing | `[Clothing]` | Clothing and armor |
-| Miscellaneous | `[Miscellaneous]` | Miscellaneous items without a dedicated category |
-| Special Items | `[Special Items]` | Special items |
+| Contents | Recommended chest name | Full game category |
+|----------|------------------------|--------------------|
+| Raw materials and crafting resources | `[Resources]` | `Resources` |
+| Food, drinks and cooking ingredients | `[Food]` | `Food/Cooking` |
+| All weapons **and** ammo (umbrella) | `[Weapons]` | `Ammo/Weapons` |
+| Guns and ranged weapons only | `[Ranged Weapons]` | `Ranged Weapons` |
+| Melee weapons only | `[Melee Weapons]` | `Melee Weapons` |
+| Ammunition only | `[Ammo]` | `Ammo` |
+| Tools, devices and traps | `[Tools]` | `Tools/Traps` |
+| Special / quest items | `[Special Items]` | `Special Items` |
+| Books and schematics | `[Books]` | `Books` |
+| Science items (acid, beakers, …) | `[Science]` | `Science` |
+| Medical items (meds, bandages, …) | `[Medical]` | `Medical` |
+| Chemicals and chemical base materials | `[Chemicals]` | `Chemicals` |
+| Armor pieces | `[Armor]` | `Armor` |
+| Clothing | `[Clothing]` | `Clothing` |
+| Robotics (drones, turrets, …) | `[Robotics]` | `Robotics` |
+
+> **About the umbrella category:** Most guns carry **both** `Ammo/Weapons` and `Ranged Weapons`
+> (melee likewise carries `Ammo/Weapons` + `Melee Weapons`). So a single `[Weapons]` chest collects
+> all weapons and ammo together; add separate `[Ranged Weapons]`, `[Melee Weapons]` and `[Ammo]`
+> chests only if you want them split — the nearest matching chest wins.
+>
+> **Avoid `[Decor]` / `[Miscellaneous]`:** in V2.6, `Decor/Miscellaneous` is the **default** group
+> for every item that has no real category (mods, schematics, quest junk — hundreds of items). Such
+> a chest would be flooded. Use the mod's own `[misc]` catch-all instead.
 
 > Note: You don't need a chest for every category. Create only the category chests you need — the
 > rest goes into `[misc]` or stays in the `[sort]` chest.
+
+### Custom names (aliases)
+
+Want a chest name that isn't part of the category at all (e.g. `[Guns]` for ranged weapons)? Add an
+**alias** in `Config/CategorySorter.xml`. Each alias maps your chosen label to one or more real
+categories:
+
+```xml
+<Aliases>
+    <Alias label="Guns"   group="Ranged Weapons"/>
+    <Alias label="Loot"   group="Special Items"/>
+    <Alias label="Combat" group="Ranged Weapons,Melee Weapons,Ammo"/>
+</Aliases>
+```
+
+A chest named `[Guns]` then behaves exactly like a `[Ranged Weapons]` chest. The last example bundles
+several categories into one chest.
 
 ---
 
@@ -97,6 +128,7 @@ Settings in `Config/CategorySorter.xml`:
 | `SortTag` | `[sort]` | Name of the sorting chest |
 | `MiscTag` | `[misc]` | Name of the catch-all chest |
 | `MaxDistance` | `20.0` | Search radius in blocks (`-1` = no distance limit within the area) |
+| `Aliases` | *(empty)* | Optional custom chest names mapped to real categories (see above) |
 | `VerboseLogging` | `false` | Additional server log output |
 
 ---

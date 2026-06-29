@@ -11,4 +11,17 @@
 
     <!-- Name der optionalen Sammelkiste fuer nicht zuordenbare Items. -->
     <MiscTag>[misc]</MiscTag>
+
+    <!--
+        Optionale Aliase fuer frei waehlbare Wunschnamen.
+        Kurze Labels wie [Food], [Weapons], [Tools], [Ammo] funktionieren bereits OHNE Eintrag,
+        weil zusammengesetzte Kategorien (z. B. "Food/Cooking") auch auf ihre Slash-Segmente
+        matchen. Aliase brauchst du nur fuer eigene Namen, die NICHT im Kategorienamen vorkommen.
+        "group" darf mehrere echte Kategorien per Komma buendeln.
+    -->
+    <Aliases>
+        <!-- <Alias label="Guns"   group="Ranged Weapons"/> -->
+        <!-- <Alias label="Loot"   group="Special Items"/> -->
+        <!-- <Alias label="Combat" group="Ranged Weapons,Melee Weapons,Ammo"/> -->
+    </Aliases>
 </CategorySorter.Config>

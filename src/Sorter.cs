@@ -78,7 +78,7 @@ namespace CategorySorter
                     var moved = false;
                     foreach (var t in categoryTargets)
                     {
-                        if (!groups.Any(g => string.Equals(g.Trim(), t.Category, StringComparison.OrdinalIgnoreCase)))
+                        if (!CategoryMatcher.Matches(t.Category, groups, Config.Aliases))
                             continue;
                         if (MoveInto(t.Lootable, stack, accessed, modified))
                         {
