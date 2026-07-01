@@ -1,3 +1,31 @@
+## [1.1.1](https://github.com/Jaydee94/7d2d-chest-organizer/compare/v1.1.0...v1.1.1) (2026-07-01)
+
+### Documentation
+
+* translate packaged ModInfo/config text and log messages to English ([9a17b59](https://github.com/Jaydee94/7d2d-chest-organizer/commit/9a17b59f874a9806fd69953a8797298c713bf014))
+
+### Continuous Integration
+
+* pin 7DTD dedicated server to Steam branch v2.6 ([e244372](https://github.com/Jaydee94/7d2d-chest-organizer/commit/e24437234d65ac1ec7d1eb4254851bfcd3a9a54c))
+* release a patch for docs/ci/build/refactor/perf commits ([643056e](https://github.com/Jaydee94/7d2d-chest-organizer/commit/643056ec040b1bbed47706bbe0227183d5c255ca))
+
+
+### Installation
+1. Download `CategorySorter-v1.1.1.zip` and unzip it.
+2. Copy the `CategorySorter/` folder into your server's `Mods/` directory.
+3. Restart the server. (Server-side only — clients don't need to install anything; EAC can stay enabled on a dedicated server.)
+
+### Contents
+```
+CategorySorter/
+├── CategorySorter.dll
+├── ModInfo.xml
+└── Config/
+    └── CategorySorter.xml
+```
+
+Built for **7 Days to Die V2.6**.
+
 # [1.1.0](https://github.com/Jaydee94/7d2d-chest-organizer/compare/v1.0.0...v1.1.0) (2026-06-29)
 
 

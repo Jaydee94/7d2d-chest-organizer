@@ -4,7 +4,7 @@
     <DisplayName value="Category Sorter" />
     <Description value="Server-side mod: when a chest named [sort] is closed, its items are automatically distributed into nearby chests named after an item category (e.g. Ammo/Weapons, Tools/Traps). Optional [misc] catch-all chest. Clients don't need to install anything." />
     <Author value="jaydee94" />
-    <Version value="1.1.0.0" />
+    <Version value="1.1.1.0" />
     <Website value="" />
     <SkipWithAntiCheat value="true" />
 </xml>
