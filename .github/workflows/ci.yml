@@ -27,9 +27,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/.7dtd-server
-          key: ${{ runner.os }}-steamcmd-7dtd-v1
+          # Key auf den gepinnten Branch (v2.6) gescoped, damit kein alter
+          # public/V3.0-Payload aus dem Cache wiederverwendet wird.
+          key: ${{ runner.os }}-steamcmd-7dtd-v2.6-1
           restore-keys: |
-            ${{ runner.os }}-steamcmd-7dtd-
+            ${{ runner.os }}-steamcmd-7dtd-v2.6-
 
       - name: 7DTD Dedicated Server installieren (für Build-DLLs)
         run: bash scripts/install-7dtd-server.sh "${{ github.workspace }}/.7dtd-server"

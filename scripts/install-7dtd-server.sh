@@ -3,10 +3,14 @@
 # herunter. Dessen Managed-Ordner liefert die Build-DLLs (Assembly-CSharp, Unity, ...).
 # Wird in CI verwendet; Ergebnis wird gecacht.
 #
+# Die Version wird bewusst auf den Steam-Branch "v2.6" gepinnt (der Default-Branch
+# "public" ist seit V3.0 nicht mehr V2.6). Über BETA_BRANCH überschreibbar.
+#
 # Verwendung: scripts/install-7dtd-server.sh <SERVER_ROOT>
 set -euo pipefail
 
 SERVER_ROOT="${1:?SERVER_ROOT (Zielpfad) fehlt}"
+BETA_BRANCH="${BETA_BRANCH:-v2.6}"
 
 mkdir -p "$HOME/steamcmd"
 cd "$HOME/steamcmd"
@@ -22,10 +26,11 @@ install_server() {
     +force_install_dir "$SERVER_ROOT" \
     +login anonymous \
     +app_info_update 1 \
-    +app_update 294420 validate \
+    +app_update 294420 -beta "$BETA_BRANCH" validate \
     +quit
 }
 
+echo "Installiere 7DTD Dedicated Server (App 294420, Branch '$BETA_BRANCH')..."
 if ! install_server; then
   echo "Erster SteamCMD-Versuch fehlgeschlagen; appmanifest bereinigen und erneut versuchen..."
   rm -f "$SERVER_ROOT/steamapps/appmanifest_294420.acf"
