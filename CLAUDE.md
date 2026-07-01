@@ -82,7 +82,11 @@ fallback. Game DLLs are not redistributable and must never be committed.
 
 `.github/workflows/` — `ci.yml` (PR compile check) and `release.yml` (manual). Both obtain the game
 DLLs by installing the **7DTD Dedicated Server (Steam app 294420) anonymously via SteamCMD**
-(`scripts/install-7dtd-server.sh`, cached) — no Steam account or secret needed. Releases use
+(`scripts/install-7dtd-server.sh`, cached) — no Steam account or secret needed. The install is
+**pinned to the Steam branch `v2.6`** (`-beta v2.6`, overridable via `BETA_BRANCH`): the default
+`public` branch is now V3.0, which replaced the `GameManager.TEUnlockServer` / `lockedTileEntities`
+API this mod hooks with a new `LockManager` — so building against `public` fails to compile. The
+cache key is scoped to the branch (`…-7dtd-v2.6-*`) so a stale V3.0 payload is never reused. Releases use
 **semantic-release** (`.releaserc.json`): version and notes come from **Conventional Commits**,
 `scripts/stage-release.sh` stamps the version into `ModInfo.xml` and zips `CategorySorter-vX.Y.Z.zip`,
 `scripts/release-footer.sh` appends an installation section to the notes.
