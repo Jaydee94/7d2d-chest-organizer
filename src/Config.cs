@@ -56,7 +56,7 @@ namespace CategorySorter
 
                 if (!File.Exists(path))
                 {
-                    Log.Warning("[" + AssemblyName + "] Config nicht gefunden (" + path + "), nutze Defaults.");
+                    Log.Warning("[" + AssemblyName + "] Config not found (" + path + "), using defaults.");
                     return;
                 }
 
@@ -65,7 +65,7 @@ namespace CategorySorter
                 var root = doc.DocumentElement;
                 if (root == null)
                 {
-                    Log.Warning("[" + AssemblyName + "] Leere Config, nutze Defaults.");
+                    Log.Warning("[" + AssemblyName + "] Empty config, using defaults.");
                     return;
                 }
 
@@ -87,14 +87,14 @@ namespace CategorySorter
 
                 LoadAliases(root["Aliases"]);
 
-                Log.Out("[" + AssemblyName + "] Config geladen: SortTag=" + SortTag
+                Log.Out("[" + AssemblyName + "] Config loaded: SortTag=" + SortTag
                     + ", MiscTag=" + MiscTag + ", MaxDistance=" + MaxDistance
                     + ", Aliases=" + Aliases.Count
                     + ", VerboseLogging=" + VerboseLogging);
             }
             catch (Exception e)
             {
-                Log.Error("[" + AssemblyName + "] Config-Fehler: " + e.Message);
+                Log.Error("[" + AssemblyName + "] Config error: " + e.Message);
             }
         }
 

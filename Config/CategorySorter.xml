@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CategorySorter.Config>
-    <!-- Zusaetzliche Log-Ausgaben. -->
+    <!-- Additional log output. -->
     <VerboseLogging>false</VerboseLogging>
 
-    <!-- Suchradius in Bloecken um die Sortierkiste. -1 = volle 3x3 Chunks. -->
+    <!-- Search radius in blocks around the sorting chest. -1 = full 3x3 chunks. -->
     <MaxDistance>20.0</MaxDistance>
 
-    <!-- Name der Sortierkiste (Klammern optional, Gross/Klein egal). -->
+    <!-- Name of the sorting chest (brackets optional, case-insensitive). -->
     <SortTag>[sort]</SortTag>
 
-    <!-- Name der optionalen Sammelkiste fuer nicht zuordenbare Items. -->
+    <!-- Name of the optional catch-all chest for items with no matching category. -->
     <MiscTag>[misc]</MiscTag>
 
     <!--
-        Optionale Aliase fuer frei waehlbare Wunschnamen.
-        Kurze Labels wie [Food], [Weapons], [Tools], [Ammo] funktionieren bereits OHNE Eintrag,
-        weil zusammengesetzte Kategorien (z. B. "Food/Cooking") auch auf ihre Slash-Segmente
-        matchen. Aliase brauchst du nur fuer eigene Namen, die NICHT im Kategorienamen vorkommen.
-        "group" darf mehrere echte Kategorien per Komma buendeln.
+        Optional aliases for freely chosen custom names.
+        Short labels like [Food], [Weapons], [Tools], [Ammo] already work WITHOUT an entry,
+        because compound categories (e.g. "Food/Cooking") also match their slash segments.
+        You only need aliases for your own names that do NOT appear in the category name.
+        "group" may bundle several real categories, separated by commas.
     -->
     <Aliases>
         <!-- <Alias label="Guns"   group="Ranged Weapons"/> -->
